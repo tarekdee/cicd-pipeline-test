@@ -36,26 +36,19 @@ jobs:
       - name: Trigger Pulumi Preview
         id: preview
         run: |
-          PREVIEW_RESPONSE=$(curl -s -X POST "https://api.pulumi.com/api/organizations/aenetworks/projects/cicd-pipeline-test/stacks/dev/deployments" \
+          PREVIEW_RESPONSE=$(curl -s -X POST "https://api.pulumi.com/api/stacks/aenetworks/cicd-pipeline-test/dev/deployments" \
             -H "Authorization: token pul-899091ad02427f8fe86c1f7c6def3bd29cc86f4a" \
             -H "Content-Type: application/json" \
             -d '{
-                  "operation": {
-                    "kind": "preview",
-                    "message": "Preview triggered via GitHub Actions"
-                  }
+                  "operation": "preview"
                 }')
-            echo "PREVIEW_DEPLOYMENT_ID=$(echo $PREVIEW_RESPONSE)" >> $GITHUB_ENV
 
       - name: Trigger Pulumi Up
         run: |
-          curl -X POST "https://api.pulumi.com/api/organizations/aenetworks/projects/cicd-pipeline-test/stacks/dev/deployments" \
+          curl -X POST "https://api.pulumi.com/api/stacks/aenetworks/cicd-pipeline-test/dev/deployments" \
             -H "Authorization: token pul-899091ad02427f8fe86c1f7c6def3bd29cc86f4a" \
             -H "Content-Type: application/json" \
             -d '{
-                  "operation": {
-                    "kind": "update",
-                    "message": "Update triggered via GitHub Actions"
-                  }
+                  "operation": "update"
                 }'
      
