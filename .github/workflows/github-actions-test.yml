@@ -37,7 +37,7 @@ jobs:
         id: preview
         run: |
           PREVIEW_RESPONSE=$(curl -s -X POST "https://api.pulumi.com/api/stacks/aenetworks/cicd-pipeline-test/dev/deployments" \
-            -H "Authorization: token pul-899091ad02427f8fe86c1f7c6def3bd29cc86f4a" \
+            -H "Authorization: token ${{ secrets.PULUMI_ACCESS_TOKEN }}" \
             -H "Content-Type: application/json" \
             -d '{
                   "operation": "preview"
@@ -46,7 +46,7 @@ jobs:
       - name: Trigger Pulumi Up
         run: |
           curl -X POST "https://api.pulumi.com/api/stacks/aenetworks/cicd-pipeline-test/dev/deployments" \
-            -H "Authorization: token pul-899091ad02427f8fe86c1f7c6def3bd29cc86f4a" \
+            -H "Authorization: token ${{ secrets.PULUMI_ACCESS_TOKEN }}" \
             -H "Content-Type: application/json" \
             -d '{
                   "operation": "update"
