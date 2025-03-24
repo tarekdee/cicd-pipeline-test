@@ -1,0 +1,30 @@
+name: cicd-pipeline-test
+runtime: nodejs
+description: Pulumi project for AWS infrastructure, including essential resources for modern applications
+template:
+  description: Template which is created for static website hosting purposes.
+  config:
+    environment:
+      description: "Select environment from the following: POC, DEV, QAT, UAT, STG, DBG, PRD, DRE, DV1, DV2, DV3, QA1, QA2, QA3, TRN"
+      type: string
+      default: DEV
+    applicationID:
+      description: "Enter your applicationn ID."
+      type: string
+      default: template-static-app
+    accountNumber:
+      description: "Enter the AWS account number where the stack will be deployed."
+      type: string
+      default: 321543719502
+    region:
+      description: "Enter AWS region."
+      type: string
+      default: us-east-1
+    domainName:
+      description: "Enter the domain that your application will be served on."
+      type: string
+      default: pulumi-test.sandbox.aetnd.io
+    hostedZoneId:
+      description: "Enter hosted zone ID where the root domain resides."
+      type: string
+      default: ZN8QCP9TVT9UQ
