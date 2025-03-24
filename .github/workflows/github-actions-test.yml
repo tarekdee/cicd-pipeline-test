@@ -1,18 +1,55 @@
 name: GitHub Actions Demo
 run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
-on: [push]
+on:
+  push:
+    branches:
+      - main
 jobs:
-  Explore-GitHub-Actions:
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
-      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
-      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
-      - name: Check out repository code
+  # Explore-GitHub-Actions:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+  #     - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+  #     - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+  build-and-deploy:
+      runs-on: ubuntu-latest
+      steps:
+      # Step 1: Checkout the repository
+      - name: Checkout code
         uses: actions/checkout@v4
-      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
-      - run: echo "🖥️ The workflow is now ready to test your code on the runner."
-      - name: List files in the repository
-        run: |
-          ls ${{ github.workspace }}
-      - run: echo "🍏 This job's status is ${{ job.status }}."
+
+      # Step 2: Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16' # Use the Node.js version your project requires
+
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # Step 4: Build the project
+      - name: Build the project
+        run: npm run build
+
+      # Step 5: Set up Pulumi
+      - name: Set up Pulumi
+        uses: pulumi/actions@v4
+        with:
+          command: login
+        env:
+          PULUMI_ACCESS_TOKEN: pul-899091ad02427f8fe86c1f7c6def3bd29cc86f4a
+
+       # Step 6: Refresh Pulumi stack
+      - name: Pulumi Refresh
+        run: pulumi refresh -s aenetworks/cicd-pipeline-test/dev
+        env:
+          AWS_REGION: us-east-1
+
+      # Step 7: Deploy Pulumi stack
+      - name: Pulumi Deploy
+        run: pulumi up --yes -s aenetworks/cicd-pipeline-test/dev
+        env:
+          AWS_REGION: us-east-1
+    
+    
