@@ -57,5 +57,4 @@ jobs:
                     "message": "Update triggered via GitHub Actions"
                   }
                 }'
-    
-    
+     
