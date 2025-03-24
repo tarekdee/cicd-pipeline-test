@@ -32,24 +32,42 @@ jobs:
       - name: Build the project
         run: npm run build
 
-      # Step 5: Set up Pulumi
-      - name: Set up Pulumi
-        uses: pulumi/actions@v4
-        with:
-          command: login
-        env:
-          PULUMI_ACCESS_TOKEN: pul-899091ad02427f8fe86c1f7c6def3bd29cc86f4a
+      # Step 5: Pulumi deployments
+      - name: Trigger Pulumi Preview
+        id: preview
+        run: |
+          PREVIEW_RESPONSE=$(curl -s -X POST "https://api.pulumi.com/api/organizations/aenetworks/projects/cicd-pipeline-test/stacks/dev/deployments" \
+            -H "Authorization: token pul-899091ad02427f8fe86c1f7c6def3bd29cc86f4a" \
+            -H "Content-Type: application/json" \
+            -d '{
+                  "operation": {
+                    "kind": "preview",
+                    "message": "Preview triggered via GitHub Actions"
+                  }
+                }')
+          echo "PREVIEW_DEPLOYMENT_ID=$(echo $PREVIEW_RESPONSE | jq -r '.deploymentId')" >> $GITHUB_ENV
 
-       # Step 6: Refresh Pulumi stack
-      - name: Pulumi Refresh
-        run: pulumi refresh -s aenetworks/cicd-pipeline-test/dev
-        env:
-          AWS_REGION: us-east-1
+       # Check Preview Result
+      - name: Check Preview Result
+        id: check-preview
+        run: |
+          PREVIEW_RESULT=$(curl -s -X GET "https://api.pulumi.com/api/organizations/aenetworks/projects/cicd-pipeline-test/stacks/dev/deployments/$PREVIEW_DEPLOYMENT_ID" \
+            -H "Authorization: token pul-899091ad02427f8fe86c1f7c6def3bd29cc86f4a")
+          HAS_CHANGES=$(echo $PREVIEW_RESULT | jq -r '.result.hasChanges')
+          echo "HAS_CHANGES=$HAS_CHANGES" >> $GITHUB_ENV
 
-      # Step 7: Deploy Pulumi stack
-      - name: Pulumi Deploy
-        run: pulumi up --yes -s aenetworks/cicd-pipeline-test/dev
-        env:
-          AWS_REGION: us-east-1
+      # Trigger Pulumi Up if Changes Exist
+      - name: Trigger Pulumi Up
+        if: env.HAS_CHANGES == 'true'
+        run: |
+          curl -X POST "https://api.pulumi.com/api/organizations/aenetworks/projects/cicd-pipeline-test/stacks/dev/deployments" \
+            -H "Authorization: token pul-899091ad02427f8fe86c1f7c6def3bd29cc86f4a" \
+            -H "Content-Type: application/json" \
+            -d '{
+                  "operation": {
+                    "kind": "update",
+                    "message": "Update triggered via GitHub Actions"
+                  }
+                }'
     
     
