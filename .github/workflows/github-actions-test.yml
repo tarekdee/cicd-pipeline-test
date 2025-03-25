@@ -43,13 +43,13 @@ jobs:
                   "operation": "preview",
                   "operationContext": {
                     "preRunCommands": [
-                      "pulumi stack select aenetworks/cicd-pipeline-test/dev",
-                      "pulumi config set cicd-pipeline-test:domainName pulumi-test.sandbox.aetnd.io",
-                      "pulumi config set cicd-pipeline-test:rootDomainName sandbox.aetnd.io",
-                      "pulumi config set cicd-pipeline-test:hostedZoneId ZN8QCP9TVT9UQ",
-                      "pulumi config set cicd-pipeline-test:environment DEV",
-                      "pulumi config set cicd-pipeline-test:applicationID template-static-app", 
-                      "pulumi config set aws:region us-east-1"
+                      "pulumi stack select $ {{ secrets.STACK_NAME }}",
+                      "pulumi config set cicd-pipeline-test:domainName $ {{ secrets.DOMAIN_NAME }}",
+                      "pulumi config set cicd-pipeline-test:rootDomainName $ {{ secrets.ROOT_DOMAIN_NAME }}",
+                      "pulumi config set cicd-pipeline-test:hostedZoneId $ {{ secrets.HOSTED_ZONE_ID }}",
+                      "pulumi config set cicd-pipeline-test:environment $ {{ secrets.ENV }}",
+                      "pulumi config set cicd-pipeline-test:applicationID $ {{ secrets.APP_ID }}", 
+                      "pulumi config set aws:region $ {{ secrets.REGION }}"
                     ]
                   }
                 }'
@@ -63,13 +63,13 @@ jobs:
                   "operation": "update",
                   "operationContext": {
                     "preRunCommands": [
-                      "pulumi stack select aenetworks/cicd-pipeline-test/dev",
-                      "pulumi config set cicd-pipeline-test:domainName pulumi-test.sandbox.aetnd.io",
-                      "pulumi config set cicd-pipeline-test:rootDomainName sandbox.aetnd.io",
-                      "pulumi config set cicd-pipeline-test:hostedZoneId ZN8QCP9TVT9UQ",
-                      "pulumi config set cicd-pipeline-test:environment DEV",
-                      "pulumi config set cicd-pipeline-test:applicationID template-static-app", 
-                      "pulumi config set aws:region us-east-1"
+                      "pulumi stack select $ {{ secrets.STACK_NAME }}",
+                      "pulumi config set cicd-pipeline-test:domainName $ {{ secrets.DOMAIN_NAME }}",
+                      "pulumi config set cicd-pipeline-test:rootDomainName $ {{ secrets.ROOT_DOMAIN_NAME }}",
+                      "pulumi config set cicd-pipeline-test:hostedZoneId $ {{ secrets.HOSTED_ZONE_ID }}",
+                      "pulumi config set cicd-pipeline-test:environment $ {{ secrets.ENV }}",
+                      "pulumi config set cicd-pipeline-test:applicationID $ {{ secrets.APP_ID }}", 
+                      "pulumi config set aws:region $ {{ secrets.REGION }}"
                     ]
                   }
                 }'
