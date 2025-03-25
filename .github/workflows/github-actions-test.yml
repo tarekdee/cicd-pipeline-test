@@ -40,7 +40,14 @@ jobs:
             -H "Authorization: token ${{ secrets.PULUMI_ACCESS_TOKEN }}" \
             -H "Content-Type: application/json" \
             -d '{
-                  "operation": "preview"
+                  "operation": "preview",
+                  "config": {
+                    "cicd-pipeline-test:domainName": "pulumi-test.sandbox.aetnd.io",
+                    "cicd-pipeline-test:rootDomainName":"sandbox.aetnd.io",
+                    "cicd-pipeline-test:hostedZoneId":"ZN8QCP9TVT9UQ",
+                    "cicd-pipeline-test:environment":"DEV",
+                    "cicd-pipeline-test:applicationID":"template-static-app"
+                  }
                 }')
 
       - name: Trigger Pulumi Up
@@ -49,6 +56,13 @@ jobs:
             -H "Authorization: token ${{ secrets.PULUMI_ACCESS_TOKEN }}" \
             -H "Content-Type: application/json" \
             -d '{
-                  "operation": "update"
+                  "operation": "update",
+                  "config": {
+                    "cicd-pipeline-test:domainName": "pulumi-test.sandbox.aetnd.io",
+                    "cicd-pipeline-test:rootDomainName":"sandbox.aetnd.io",
+                    "cicd-pipeline-test:hostedZoneId":"ZN8QCP9TVT9UQ",
+                    "cicd-pipeline-test:environment":"DEV",
+                    "cicd-pipeline-test:applicationID":"template-static-app"
+                  }
                 }'
      
