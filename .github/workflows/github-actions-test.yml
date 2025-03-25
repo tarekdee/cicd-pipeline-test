@@ -41,12 +41,14 @@ jobs:
             -H "Content-Type: application/json" \
             -d '{
                   "operation": "preview",
-                  "config": {
-                    "cicd-pipeline-test:domainName": "pulumi-test.sandbox.aetnd.io",
-                    "cicd-pipeline-test:rootDomainName":"sandbox.aetnd.io",
-                    "cicd-pipeline-test:hostedZoneId":"ZN8QCP9TVT9UQ",
-                    "cicd-pipeline-test:environment":"DEV",
-                    "cicd-pipeline-test:applicationID":"template-static-app"
+                  "operationContext": {
+                    "environmentVariables": {
+                      "cicd-pipeline-test:domainName": "pulumi-test.sandbox.aetnd.io",
+                      "cicd-pipeline-test:rootDomainName":"sandbox.aetnd.io",
+                      "cicd-pipeline-test:hostedZoneId":"ZN8QCP9TVT9UQ",
+                      "cicd-pipeline-test:environment":"DEV",
+                      "cicd-pipeline-test:applicationID":"template-static-app"
+                    }
                   }
                 }')
 
