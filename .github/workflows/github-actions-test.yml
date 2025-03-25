@@ -36,7 +36,7 @@ jobs:
       - name: Trigger Pulumi Preview
         id: preview
         run: |
-          PREVIEW_RESPONSE=$(curl -s -X POST "https://api.pulumi.com/api/stacks/aenetworks/cicd-pipeline-test/dev/deployments" \
+          curl -X POST "https://api.pulumi.com/api/stacks/aenetworks/cicd-pipeline-test/dev/deployments" \
             -H "Authorization: token ${{ secrets.PULUMI_ACCESS_TOKEN }}" \
             -H "Content-Type: application/json" \
             -d '{
@@ -52,7 +52,7 @@ jobs:
                       "pulumi config set aws:region us-east-1"
                     ]
                   }
-                }')
+                }'
 
       - name: Trigger Pulumi Up
         run: |
