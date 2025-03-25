@@ -42,13 +42,13 @@ jobs:
             -d '{
                   "operation": "preview",
                   "operationContext": {
-                    "environmentVariables": {
-                      "cicd-pipeline-test:domainName": "pulumi-test.sandbox.aetnd.io",
-                      "cicd-pipeline-test:rootDomainName":"sandbox.aetnd.io",
-                      "cicd-pipeline-test:hostedZoneId":"ZN8QCP9TVT9UQ",
-                      "cicd-pipeline-test:environment":"DEV",
-                      "cicd-pipeline-test:applicationID":"template-static-app"
-                    }
+                    "preRunCommands": [
+                      "pulumi config set cicd-pipeline-test:domainName pulumi-test.sandbox.aetnd.io",
+                      "pulumi config set cicd-pipeline-test:rootDomainName sandbox.aetnd.io",
+                      "pulumi config set cicd-pipeline-test:hostedZoneId ZN8QCP9TVT9UQ",
+                      "pulumi config set cicd-pipeline-test:environment DEV",
+                      "pulumi config set cicd-pipeline-test:applicationID template-static-app"
+                    ],
                   }
                 }')
 
