@@ -39,52 +39,28 @@ jobs:
           curl -X POST "https://api.pulumi.com/api/stacks/aenetworks/cicd-pipeline-test/dev/deployments" \
             -H "Authorization: token ${{ secrets.PULUMI_ACCESS_TOKEN }}" \
             -H "Content-Type: application/json" \
-            -d "$(jq -n --arg stackName "${{ secrets.STACK_NAME }}" \
-                  --arg domainName "${{ secrets.DOMAIN_NAME }}" \
-                  --arg rootDomainName "${{ secrets.ROOT_DOMAIN_NAME }}" \
-                  --arg hostedZoneId "${{ secrets.HOSTED_ZONE_ID }}" \
-                  --arg env "${{ secrets.ENV }}" \
-                  --arg appId "${{ secrets.APP_ID }}" \
-                  --arg region "${{ secrets.REGION }}" \
-                  '{
+            -d "{
                     "operation": "preview",
                     "operationContext": {
                       "preRunCommands": [
                         "pulumi stack select \($stackName)",
-                        "pulumi config set cicd-pipeline-test:domainName \($domainName)",
-                        "pulumi config set cicd-pipeline-test:rootDomainName \($rootDomainName)",
-                        "pulumi config set cicd-pipeline-test:hostedZoneId \($hostedZoneId)",
-                        "pulumi config set cicd-pipeline-test:environment \($env)",
-                        "pulumi config set cicd-pipeline-test:applicationID \($appId)", 
-                        "pulumi config set aws:region \($region)"
+                        "pulumi config refresh --force"
                       ]
                     }
-                  }')"
+                }"
 
       - name: Trigger Pulumi Up
         run: |
           curl -X POST "https://api.pulumi.com/api/stacks/aenetworks/cicd-pipeline-test/dev/deployments" \
             -H "Authorization: token ${{ secrets.PULUMI_ACCESS_TOKEN }}" \
             -H "Content-Type: application/json" \
-            -d "$(jq -n --arg stackName "${{ secrets.STACK_NAME }}" \
-                  --arg domainName "${{ secrets.DOMAIN_NAME }}" \
-                  --arg rootDomainName "${{ secrets.ROOT_DOMAIN_NAME }}" \
-                  --arg hostedZoneId "${{ secrets.HOSTED_ZONE_ID }}" \
-                  --arg env "${{ secrets.ENV }}" \
-                  --arg appId "${{ secrets.APP_ID }}" \
-                  --arg region "${{ secrets.REGION }}" \
-                  '{
+            -d "{
                     "operation": "update",
                     "operationContext": {
                       "preRunCommands": [
                         "pulumi stack select \($stackName)",
-                        "pulumi config set cicd-pipeline-test:domainName \($domainName)",
-                        "pulumi config set cicd-pipeline-test:rootDomainName \($rootDomainName)",
-                        "pulumi config set cicd-pipeline-test:hostedZoneId \($hostedZoneId)",
-                        "pulumi config set cicd-pipeline-test:environment \($env)",
-                        "pulumi config set cicd-pipeline-test:applicationID \($appId)", 
-                        "pulumi config set aws:region \($region)"
+                        "pulumi config refresh --force"
                       ]
                     }
-                  }')"
+                }"
      
