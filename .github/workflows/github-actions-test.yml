@@ -61,19 +61,29 @@ jobs:
                 "operation": "refresh"
               }')"
 
-      - name: Trigger Pulumi Up
+      # - name: Trigger Pulumi Up
+      #   run: |
+      #     curl -X POST "https://api.pulumi.com/api/stacks/aenetworks/cicd-pipeline-test/dev/deployments" \
+      #       -H "Authorization: token ${{ secrets.PULUMI_ACCESS_TOKEN }}" \
+      #       -H "Content-Type: application/json" \
+      #       -d "$(jq -n --arg stackName "${{ secrets.STACK_NAME }}" \
+      #         '{
+      #           "operation": "update",
+      #           "operationContext": {
+      #             "preRunCommands": [
+      #               "pulumi stack select \($stackName)",
+      #               "pulumi config refresh --force"
+      #             ]
+      #           }
+      #         }')"
+        
+      - name: Trigger pulumi update
         run: |
-          curl -X POST "https://api.pulumi.com/api/stacks/aenetworks/cicd-pipeline-test/dev/deployments" \
-            -H "Authorization: token ${{ secrets.PULUMI_ACCESS_TOKEN }}" \
-            -H "Content-Type: application/json" \
-            -d "$(jq -n --arg stackName "${{ secrets.STACK_NAME }}" \
-              '{
-                "operation": "update",
-                "operationContext": {
-                  "preRunCommands": [
-                    "pulumi stack select \($stackName)",
-                    "pulumi config refresh --force"
-                  ]
-                }
-              }')"
+            curl -X POST "https://api.pulumi.com/api/stacks/aenetworks/cicd-pipeline-test/dev/deployments" \
+              -H "Authorization: token ${{ secrets.PULUMI_ACCESS_TOKEN }}" \
+              -H "Content-Type: application/json" \
+              -d "$(jq -n --arg stackName "${{ secrets.STACK_NAME }}" \
+                '{
+                  "operation": "update"
+                }')"
      
