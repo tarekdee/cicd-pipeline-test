@@ -33,21 +33,32 @@ jobs:
         run: npm run build
 
       # Step 5: Pulumi deployments
-      - name: Trigger Pulumi Preview
-        id: preview
+      # - name: Trigger Pulumi Preview
+      #   id: preview
+      #   run: |
+      #     curl -X POST "https://api.pulumi.com/api/stacks/aenetworks/cicd-pipeline-test/dev/deployments" \
+      #       -H "Authorization: token ${{ secrets.PULUMI_ACCESS_TOKEN }}" \
+      #       -H "Content-Type: application/json" \
+      #       -d "$(jq -n --arg stackName "${{ secrets.STACK_NAME }}" \
+      #         '{
+      #           "operation": "preview",
+      #           "operationContext": {
+      #             "preRunCommands": [
+      #               "pulumi stack select \($stackName)",
+      #               "pulumi config refresh --force"
+      #             ]
+      #           }
+      #         }')"
+
+      - name: Trigger Pulumi Refresh
+        id: refresh
         run: |
           curl -X POST "https://api.pulumi.com/api/stacks/aenetworks/cicd-pipeline-test/dev/deployments" \
             -H "Authorization: token ${{ secrets.PULUMI_ACCESS_TOKEN }}" \
             -H "Content-Type: application/json" \
             -d "$(jq -n --arg stackName "${{ secrets.STACK_NAME }}" \
               '{
-                "operation": "preview",
-                "operationContext": {
-                  "preRunCommands": [
-                    "pulumi stack select \($stackName)",
-                    "pulumi config refresh --force"
-                  ]
-                }
+                "operation": "refresh"
               }')"
 
       - name: Trigger Pulumi Up
