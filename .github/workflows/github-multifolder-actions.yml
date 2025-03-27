@@ -43,7 +43,7 @@ jobs:
 
       # Step 1.0.1 Move to the working directory dev
       - name: Move to dev folder
-        run: cd dev && ls && echo "Now in dev folder"
+        run: echo "cd dev" >> $GITHUB_ENV && echo "Now in dev folder"
 
       # Step 2: Set up Node.js
       - name: Set up Node.js
@@ -133,7 +133,7 @@ jobs:
 
       # Step 1.0.1 Move to the working directory prod
       - name: Move to prod folder
-        run: cd prod && ls && echo "Now in prod folder"
+        run: echo "cd dev" >> $GITHUB_ENV && echo "Now in prod folder"
 
       # Step 2: Set up Node.js
       - name: Set up Node.js
