@@ -15,12 +15,26 @@ jobs:
   #     - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
   #     - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
   build-and-deploy-dev-folder:
-      if: contains(join(github.event.commits.*.modified, ' '), 'dev/')
       runs-on: ubuntu-latest
       steps:
       # Step 1: Checkout the repository
       - name: Checkout code
         uses: actions/checkout@v4
+
+      # Identify changed files
+      - name: Check for changes in dev folder
+        id: check-dev-changes
+        run: |
+          if git diff --name-only HEAD~1 HEAD | grep "^dev/"; then
+            echo "CHANGES_DETECTED=true" >> $GITHUB_ENV
+          else
+            echo "CHANGES_DETECTED=false" >> $GITHUB_ENV
+          fi
+
+      # Exit early if no changes in prod/
+      - name: Skip job if no dev folder changes
+        if: env.CHANGES_DETECTED == 'false'
+        run: echo "No changes detected in dev/, skipping job." && exit 0
 
       # Step 1.0.1 Move to the working directory dev
       - name: Move to dev folder
@@ -86,12 +100,26 @@ jobs:
               
 
   build-and-deploy-prod-folder:
-      if: contains(join(github.event.commits.*.modified, ' '), 'prod/')
       runs-on: ubuntu-latest
       steps:
       # Step 1: Checkout the repository
       - name: Checkout code
         uses: actions/checkout@v4
+
+      # Identify changed files
+      - name: Check for changes in prod folder
+        id: check-prod-changes
+        run: |
+          if git diff --name-only HEAD~1 HEAD | grep "^prod/"; then
+            echo "CHANGES_DETECTED=true" >> $GITHUB_ENV
+          else
+            echo "CHANGES_DETECTED=false" >> $GITHUB_ENV
+          fi
+
+      # Exit early if no changes in prod/
+      - name: Skip job if no prod folder changes
+        if: env.CHANGES_DETECTED == 'false'
+        run: echo "No changes detected in prod/, skipping job." && exit 0
 
       # Step 1.0.1 Move to the working directory prod
       - name: Move to prod folder
