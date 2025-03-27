@@ -16,6 +16,8 @@ jobs:
   #     - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
   build-and-deploy-dev-folder:
       runs-on: ubuntu-latest
+      env:
+        PULUMI_DISABLE_AUTOMATIC_PLUGIN_ACQUISITION: true
       steps:
       # Step 1: Checkout the repository
       - name: Checkout code
