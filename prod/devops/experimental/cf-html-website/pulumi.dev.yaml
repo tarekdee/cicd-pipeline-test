@@ -1,0 +1,9 @@
+config:
+  pulumi:autonaming:
+    mode: verbatim
+  aws:region: us-east-1
+  cicd-pipeline-test:domainName: "pulumi-test.sandbox.aetnd.io"
+  cicd-pipeline-test:rootDomainName: "sandbox.aetnd.io"
+  cicd-pipeline-test:hostedZoneId: "ZN8QCP9TVT9UQ"
+  cicd-pipeline-test:environment: "DEV"
+  cicd-pipeline-test:applicationID: "template-static-app"

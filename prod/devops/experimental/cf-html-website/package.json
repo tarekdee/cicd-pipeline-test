@@ -1,0 +1,14 @@
+{
+    "name": "static-site-hosting",
+    "main": "index.ts",
+    "devDependencies": {
+        "@types/node": "^18",
+        "typescript": "^5.0.0"
+    },
+    "dependencies": {
+        "@pulumi/aws": "^6.67.0",
+        "@pulumi/awsx": "^2.0.2",
+        "@pulumi/pulumi": "^3.156.0",
+        "source-map-support": "^0.5.21"
+    }
+}
