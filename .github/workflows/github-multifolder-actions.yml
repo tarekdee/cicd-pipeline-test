@@ -41,10 +41,6 @@ jobs:
           echo "No changes detected in dev/, skipping job."
           exit 1
 
-      # Step 1.0.1 Move to the working directory dev
-      - name: Move to dev folder
-        run: echo "cd dev" >> $GITHUB_ENV && echo "Now in dev folder"
-
       # Step 2: Set up Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v3
@@ -54,10 +50,12 @@ jobs:
       # Step 3: Install dependencies
       - name: Install dependencies
         run: npm install
+        working-directory: dev
 
       # Step 4: Build the project
       - name: Build the project
         run: npm run build
+        working-directory: dev
 
       #Step 5: Pulumi deployments
       - name: Trigger Pulumi Preview
@@ -144,10 +142,12 @@ jobs:
       # Step 3: Install dependencies
       - name: Install dependencies
         run: npm install
+        working-directory: prod
 
       # Step 4: Build the project
       - name: Build the project
         run: npm run build
+        working-directory: prod
 
       #Step 5: Pulumi deployments
       - name: Trigger Pulumi Preview
