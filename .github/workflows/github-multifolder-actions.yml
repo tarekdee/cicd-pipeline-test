@@ -40,7 +40,7 @@ jobs:
 
       # Step 1.0.1 Move to the working directory dev
       - name: Move to dev folder
-        run: cd dev && echo "Now in dev folder"
+        run: cd dev && ls && echo "Now in dev folder"
 
       # Step 2: Set up Node.js
       - name: Set up Node.js
@@ -116,7 +116,7 @@ jobs:
         run: |
           CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD || echo "")
           echo "Changed files: $CHANGED_FILES"
-          if echo "$CHANGED_FILES" | grep "^dev/" > /dev/null; then
+          if echo "$CHANGED_FILES" | grep "^prod/" > /prod/null; then
             echo "CHANGES_DETECTED=true" >> $GITHUB_ENV
           else
             echo "CHANGES_DETECTED=false" >> $GITHUB_ENV
@@ -125,12 +125,12 @@ jobs:
       - name: Skip job if no dev folder changes
         if: env.CHANGES_DETECTED == 'false'
         run: |
-          echo "No changes detected in dev/, skipping job."
+          echo "No changes detected in prod/, skipping job."
           exit 1
 
       # Step 1.0.1 Move to the working directory prod
       - name: Move to prod folder
-        run: cd prod && echo "Now in prod folder"
+        run: cd prod && ls && echo "Now in prod folder"
 
       # Step 2: Set up Node.js
       - name: Set up Node.js
