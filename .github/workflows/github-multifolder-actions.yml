@@ -15,7 +15,7 @@ jobs:
   #     - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
   #     - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
   build-and-deploy-dev-folder:
-      if: contains(github.event.head_commit.modified, 'dev/')
+      if: contains(join(github.event.commits.*.modified, ' '), 'dev/')
       runs-on: ubuntu-latest
       steps:
       # Step 1: Checkout the repository
@@ -86,7 +86,7 @@ jobs:
               
 
   build-and-deploy-prod-folder:
-      if: contains(github.event.head_commit.modified, 'prod/')
+      if: contains(join(github.event.commits.*.modified, ' '), 'prod/')
       runs-on: ubuntu-latest
       steps:
       # Step 1: Checkout the repository
