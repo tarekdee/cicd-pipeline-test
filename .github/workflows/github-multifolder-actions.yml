@@ -127,7 +127,7 @@ jobs:
         if: env.CHANGES_DETECTED == 'false'
         run: |
           echo "No changes detected in prod/, skipping job."
-          exit 1
+          exit 0
 
       # Step 1.0.1 Move to the working directory prod
       - name: Move to prod folder
