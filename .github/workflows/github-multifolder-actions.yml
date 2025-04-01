@@ -39,26 +39,29 @@ jobs:
         if: env.CHANGES_DETECTED == 'false'
         run: |
           echo "No changes detected in dev/, skipping job."
-          exit 0
 
       # Step 2: Set up Node.js
       - name: Set up Node.js
+        if: env.CHANGES_DETECTED == 'true'
         uses: actions/setup-node@v3
         with:
           node-version: '16' # Use the Node.js version your project requires
 
       # Step 3: Install dependencies
       - name: Install dependencies
+        if: env.CHANGES_DETECTED == 'true'
         run: npm install
         working-directory: dev
 
       # Step 4: Build the project
       - name: Build the project
+        if: env.CHANGES_DETECTED == 'true'
         run: npm run build
         working-directory: dev
 
       #Step 5: Pulumi deployments
       - name: Trigger Pulumi Preview
+        if: env.CHANGES_DETECTED == 'true'
         id: preview
         run: |
           curl -X POST "https://api.pulumi.com/api/stacks/aenetworks/cicd-pipeline-test/dev/deployments" \
@@ -81,6 +84,7 @@ jobs:
               }')"
 
       - name: Trigger Pulumi Up
+        if: env.CHANGES_DETECTED == 'true'
         run: |
           curl -X POST "https://api.pulumi.com/api/stacks/aenetworks/cicd-pipeline-test/dev/deployments" \
             -H "Authorization: token ${{ secrets.PULUMI_ACCESS_TOKEN }}" \
@@ -127,30 +131,34 @@ jobs:
         if: env.CHANGES_DETECTED == 'false'
         run: |
           echo "No changes detected in prod/, skipping job."
-          exit 0
 
       # Step 1.0.1 Move to the working directory prod
       - name: Move to prod folder
+        if: env.CHANGES_DETECTED == 'true'
         run: echo "cd dev" >> $GITHUB_ENV && echo "Now in prod folder"
 
       # Step 2: Set up Node.js
       - name: Set up Node.js
+        if: env.CHANGES_DETECTED == 'true'
         uses: actions/setup-node@v3
         with:
           node-version: '16' # Use the Node.js version your project requires
 
       # Step 3: Install dependencies
       - name: Install dependencies
+        if: env.CHANGES_DETECTED == 'true'
         run: npm install
         working-directory: prod
 
       # Step 4: Build the project
       - name: Build the project
+        if: env.CHANGES_DETECTED == 'true'
         run: npm run build
         working-directory: prod
 
       #Step 5: Pulumi deployments
       - name: Trigger Pulumi Preview
+        if: env.CHANGES_DETECTED == 'true'
         id: preview
         run: |
           curl -X POST "https://api.pulumi.com/api/stacks/aenetworks/cicd-pipeline-test/dev/deployments" \
@@ -173,6 +181,7 @@ jobs:
               }')"
 
       - name: Trigger Pulumi Up
+        if: env.CHANGES_DETECTED == 'true'
         run: |
           curl -X POST "https://api.pulumi.com/api/stacks/aenetworks/cicd-pipeline-test/dev/deployments" \
             -H "Authorization: token ${{ secrets.PULUMI_ACCESS_TOKEN }}" \
