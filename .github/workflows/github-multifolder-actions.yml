@@ -39,7 +39,7 @@ jobs:
         if: env.CHANGES_DETECTED == 'false'
         run: |
           echo "No changes detected in dev/, skipping job."
-          exit 1
+          exit 0
 
       # Step 2: Set up Node.js
       - name: Set up Node.js
