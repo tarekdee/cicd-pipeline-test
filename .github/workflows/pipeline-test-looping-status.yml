@@ -1,0 +1,71 @@
+name: GitHub Actions Demo
+run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Step 2: Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16' # Use the Node.js version your project requires
+
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # Step 4: Build the project
+      - name: Build the project
+        run: npm run build
+
+      # Step 5: Trigger Pulumi Deployment
+      - name: Trigger Pulumi Preview
+        id: preview
+        run: |
+          RESPONSE=$(curl -s -X POST "https://api.pulumi.com/api/stacks/aenetworks/cicd-pipeline-test/dev/deployments" \
+            -H "Authorization: token ${{ secrets.PULUMI_ACCESS_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d "$(jq -n --arg stackName '${{ secrets.STACK_NAME }}' \
+              '{
+                "operation": "preview",
+                "operationContext": {
+                  "preRunCommands": [
+                    "pulumi stack select \($stackName)",
+                    "pulumi config refresh --force"
+                  ]
+                }
+              }')")
+          
+          DEPLOYMENT_ID=$(echo "$RESPONSE" | jq -r '.id')
+          echo "DEPLOYMENT_ID=$DEPLOYMENT_ID" >> $GITHUB_ENV
+
+      # Step 6: Check Deployment Status
+      - name: Monitor Pulumi Deployment
+        run: |
+          STATUS="pending"
+          while [[ "$STATUS" == "pending" || "$STATUS" == "running" ]]; do
+            sleep 10
+            RESPONSE=$(curl -s -X GET \
+              -H "Authorization: token ${{ secrets.PULUMI_ACCESS_TOKEN }}" \
+              -H "Content-Type: application/json" \
+              --location "https://api.pulumi.com/api/stacks/aenetworks/cicd-pipeline-test/dev/deployments/$DEPLOYMENT_ID")
+            STATUS=$(echo "$RESPONSE" | jq -r '.status')
+            echo "Current Status: $STATUS"
+          done
+          
+          if [[ "$STATUS" == "succeeded" ]]; then
+            echo "✅ Deployment succeeded!"
+          else
+            echo "❌ Deployment failed!"
+            exit 1
+          fi
